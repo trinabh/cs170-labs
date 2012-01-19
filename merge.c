@@ -1,7 +1,8 @@
 //
 // Simple program used to demonstrate a git-merge
 // 
-// Base version.
+// Branch A:
+//     Developer A likes his capital letters.
 //
 // For JOS lab 1
 //
@@ -11,7 +12,10 @@
 int
 main(int argc, char **argv)
 {
+        // Merge these lines so that they print out
+        // the same thing as the base version.
+        
         printf("A\n");
-        printf("2\n");
+        printf("B\n");
         printf("C\n");
 }
