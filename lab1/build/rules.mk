@@ -180,14 +180,8 @@ tarball: distclean realclean
 	$(call run,/bin/rm -rf $(DISTDIR)-handin)
 
 handin: tarball
-	@if test -f $(KEY_FILE); \
-		then \
-		echo "  SUBMITTING ... "; \
-		$(HANDIN) $(LAB_NAME) $(DISTDIR)-handin.tgz; \
-		else \
-		echo "Key file not found! Please register a key at $(KEY_URL),"; \
-		echo "and put it under your home directory first."; \
-		fi;
+	@ echo "  SUBMITTING ... "; 
+	@ $(HANDIN) $(LAB_NAME) $(DISTDIR)-handin.tgz; 
 
 # Patch targets
 # Create a patch from ../$(DISTDIR).tar.gz.

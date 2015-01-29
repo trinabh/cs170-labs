@@ -7,17 +7,26 @@ import subprocess
 # argv should be labname filename
 
 sub_url = "http://ec2-54-173-71-20.compute-1.amazonaws.com/submit"
+reg_url = "http://ec2-54-173-71-20.compute-1.amazonaws.com/reg"
+
+def find_auth_file(dir):
+    key_from_home = fnmatch.filter(os.listdir(dir), "cs202-auth-*")
+    key_paths = [os.path.join(dir, f) for f in key_from_home]
+    return key_paths
+
 
 def read_auth():
-    home_dir = os.getenv("HOME")
-    fs = fnmatch.filter(os.listdir(home_dir), "cs202-auth-*")
+    key_from_home = find_auth_file(os.getenv("HOME"))
+    key_from_parent = find_auth_file("../")
+    fs = key_from_parent + key_from_home
     if len(fs) == 0:
-        print "No auth file found, abort"
+        print "No key file found. Please go to " + reg_url + " to obtain your key."
+        print "And make sure it is in your cs202-labs/ folder."
         exit()
-    with open(os.path.join(home_dir, fs[0])) as f:
+    with open(fs[0]) as f:
         content = f.readlines()
     if len(content) != 2:
-        print "Auth file is corrupted, abort"
+        print "Auth file is corrupted. Exit....."
         exit()
     return (content[0].strip(), content[1].strip())
 
@@ -34,7 +43,7 @@ def main(argv):
     #print u, p
     r = subprocess.Popen(["curl", "--user", u+":"+p, "-X", "POST", "-F", "file=@" + f, "-F", "lab=" + l,  sub_url], stdout=subprocess.PIPE).communicate()[0]
     if r != "ok":
-        print "Submission failed, please check parameters / auth file"
+        print "Submission failed, please check if your authentication file is intact or your internet connections."
     else:
         print '\033[92m' + "Submission successful" + '\033[0m'
     #os.system("curl -X POST -F file=%s -F lab=%s --user %s:%s %s > /dev/null" % (f, l, u, p, sub_url))
