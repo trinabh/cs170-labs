@@ -18,7 +18,7 @@ def find_auth_file(dir):
 def read_auth():
     key_from_home_cs202 = find_auth_file(os.path.join(os.getenv("HOME"), "cs202"))
     key_from_parent = find_auth_file("../") # i.e. cs202-labs, just in case...
-    fs = key_from_parent + key_from_home
+    fs = key_from_parent + key_from_home_cs202  
     if len(fs) == 0:
         print "No key file found. Please go to " + reg_url + " to obtain your key."
         print "And make sure it is in your ~/cs202/ folder."
