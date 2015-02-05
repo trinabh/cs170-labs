@@ -173,9 +173,9 @@ sys_wait(pid_t pid)
  *
  *****************************************************************************/
 
-static void app_printf(const char *format, ...) __attribute__((noinline));
+void app_printf(const char *format, ...) __attribute__((noinline));
 
-static void
+void
 app_printf(const char *format, ...)
 {
 	// set default color based on currently running process

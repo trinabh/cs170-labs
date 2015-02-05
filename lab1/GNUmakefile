@@ -65,7 +65,6 @@ $(OBJDIR)/kernel: $(KERNEL_OBJS) $(KERNEL_LINKER_FILES) $(PROCESS_BINARIES)
 	$(call link,-e multiboot_start -Ttext 0x100000 -o $@ $(KERNEL_OBJS) $(KERNEL_LINKER_FILES) -b binary $(PROCESS_BINARIES),LINK)
 	$(call run,$(OBJDUMP) -S $@ >$@.asm)
 	$(call run,$(NM) -n $@ >$@.sym)
-	$(call run,$(STRIP) -g $@)
 
 # processes are linked at address 0x200000.
 $(PROCESS_BINARIES): %: %.o $(PROCESS_LIB_OBJS) $(KERNEL_LINKER_FILES)

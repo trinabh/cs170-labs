@@ -1,0 +1,6 @@
+mkbootdisk
+obj
+*.img
+log.txt
+*-handin.tar.gz
+.gdbinit

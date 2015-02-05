@@ -81,6 +81,8 @@ QEMU_PATH = $(shell if which $(QEMU) 2>/dev/null | grep ^/ >/dev/null 2>&1; \
 			then echo ""; \
 			else echo $(CIMS_QEMU_PATH); fi)
 
+GDBPORT = 20000
+
 QEMUOPT	= -net none -parallel file:log.txt -k en-us
 
 QEMU_PRELOAD_LIBRARY = $(OBJDIR)/libqemu-nograb.so.1
@@ -104,7 +106,10 @@ run-gdb-console: run-gdb-console-$(basename $(IMAGE))
 run-graphic-gdb: run-gdb-graphic-$(basename $(IMAGE))
 run-console-gdb: run-gdb-console-$(basename $(IMAGE))
 
-check-qemu: $(QEMU_PRELOAD_LIBRARY)
+.gdbinit: .gdbinit.tmpl
+	sed "s/__gdb_port__/$(GDBPORT)/" < $^ > $@
+
+check-qemu: $(QEMU_PRELOAD_LIBRARY) .gdbinit
 	@if test -z "$$(which $(QEMU_PATH)$(QEMU) 2>/dev/null)"; then \
 		echo 1>&2; echo "***" 1>&2; \
 		echo "*** Cannot run $(QEMU). You may not have installed it yet." 1>&2; \
@@ -133,23 +138,23 @@ run-gdb-%: run-gdb-graphic-%
 
 run-gdb-graphic-%: %.img check-qemu
 	@/bin/echo "  QEMU $<"
-	@$(QEMU_PRELOAD) $(QEMU_PATH)$(QEMU) $(QEMUOPT) -S -gdb tcp::1234 -drive file=$<,index=0,media=disk,format=raw &
-	$(call run,gdb -x .gdbinit,GDB)
+	@$(QEMU_PRELOAD) $(QEMU_PATH)$(QEMU) $(QEMUOPT) -S -gdb tcp::$(GDBPORT) -drive file=$<,index=0,media=disk,format=raw &
+	-$(call run,gdb -x .gdbinit,GDB)
 
 run-gdb-console-%: %.img check-qemu
 	@/bin/echo "  QEMU $<"
-	@$(QEMU_PRELOAD) $(QEMU_PATH)$(QEMU) $(QEMUOPT) -curses -S -gdb tcp::1234 -drive file=$<,index=0,media=disk,format=raw
+	@$(QEMU_PRELOAD) $(QEMU_PATH)$(QEMU) $(QEMUOPT) -curses -S -gdb tcp::$(GDBPORT) -drive file=$<,index=0,media=disk,format=raw
 
 
 # Kill all my qemus
 kill:
-	-killall -u $$(whoami) $(QEMU_PATH)$(QEMU)
-	@sleep 0.2; if ps -U $$(whoami) | grep $(QEMU) >/dev/null; then killall -9 -u $$(whoami) $(QEMU_PATH)$(QEMU); fi
+	-killall -u $$(whoami) $(QEMU)
+	@sleep 0.2; if ps -U $$(whoami) | grep $(QEMU) >/dev/null; then killall -9 -u $$(whoami) $(QEMU); fi
 
 
 # For deleting the build
 clean:
-	$(call run,rm -rf $(OBJDIR) *.img core *.core,CLEAN)
+	$(call run,rm -rf $(OBJDIR) .gdbinit *.img core *.core,CLEAN)
 
 realclean: clean
 	$(call run,rm -rf $(DISTDIR)-handin.tgz $(DISTDIR)-handin)
@@ -164,7 +169,7 @@ DISTDIR = lab1
 distdir:
 	@/bin/rm -rf $(DISTDIR)
 	mkdir $(DISTDIR)
-	perl mklab.pl 1 0 $(DISTDIR) COPYRIGHT GNUmakefile bootstart.S elf.h mergedep.pl process.h p-procos-app.c p-procos-app2.c p-procos-app3.c lib.c lib.h boot.c kernel.c kernel.h k-loader.c link/shared.ld k-int.S x86.c const.h types.h x86.h answers.txt build/mkbootdisk.c build/rules.mk build/qemu-nograb.c submit.py
+	perl mklab.pl 1 0 $(DISTDIR) COPYRIGHT GNUmakefile bootstart.S elf.h mergedep.pl process.h p-procos-app.c p-procos-app2.c p-procos-app3.c lib.c lib.h boot.c kernel.c kernel.h k-loader.c link/shared.ld k-int.S x86.c const.h types.h x86.h answers.txt build/mkbootdisk.c build/rules.mk build/qemu-nograb.c build/functions.gdb submit.py .gdbinit.tmpl .gitignore
 	mkdir -p $(DISTDIR)/conf
 	echo >$(DISTDIR)/conf/date.mk "PACKAGEDATE="`date`
 
@@ -180,8 +185,14 @@ tarball: distclean realclean
 	$(call run,/bin/rm -rf $(DISTDIR)-handin)
 
 handin: tarball
-	@ echo "  SUBMITTING ... "; 
-	@ $(HANDIN) $(LAB_NAME) $(DISTDIR)-handin.tgz; 
+	@if test -f $(KEY_FILE); \
+		then \
+		echo "  SUBMITTING ... "; \
+		$(HANDIN) $(LAB_NAME) $(DISTDIR)-handin.tgz; \
+		else \
+		echo "Key file not found! Please register a key at $(KEY_URL),"; \
+		echo "and put it under your home directory first."; \
+		fi;
 
 # Patch targets
 # Create a patch from ../$(DISTDIR).tar.gz.
