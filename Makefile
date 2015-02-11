@@ -1,11 +1,11 @@
-LAB=2
+LAB?=2
 # 
 # NYU CS 202 - Spring 2015 - Lab
 # 
 
 # Handin
 HANDIN = python submit.py
-LAB_NAME = lab$(LAB)
+LAB_NAME ?= lab$(LAB)
 
 .PHONY: tarball
 
