@@ -1,4 +1,4 @@
-LAB?=2
+LAB?=2 # optional lab number; should be overwritten by inner makefiles
 # 
 # NYU CS 202 - Spring 2015 - Lab
 # 
@@ -38,6 +38,7 @@ tarball-check: handin-check
 
 handin: tarball-check handin-check
 	@git archive --format=tar HEAD > lab$(LAB)-handin.tar
+	@echo CREATE lab$(LAB)-handin.tar
 	@tar -rf lab$(LAB)-handin.tar .git
 	@gzip -c lab$(LAB)-handin.tar > lab$(LAB)-handin.tgz
 	@rm -f lab$(LAB)-handin.tar

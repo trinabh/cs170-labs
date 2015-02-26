@@ -3,6 +3,7 @@ import sys
 import fnmatch
 import os
 import subprocess
+import hashlib
 
 # argv should be labname filename
 
@@ -47,6 +48,13 @@ def main(argv):
         print "Submission failed, please check if your authentication file is intact or your internet connections."
     else:
         print '\033[92m' + "Submission successful" + '\033[0m'
+        print 'You should receive an email confirmation in your nyu inbox.'
+        print 'md5 checksum of the local file:'
+        md5prog = 'md5sum'
+        if os.uname()[0] == 'Darwin':
+            md5prog = 'md5'
+        r = subprocess.Popen([md5prog, f], stdout=subprocess.PIPE).communicate()[0]
+        print r
     #os.system("curl -X POST -F file=%s -F lab=%s --user %s:%s %s > /dev/null" % (f, l, u, p, sub_url))
 
 if __name__ == "__main__":
