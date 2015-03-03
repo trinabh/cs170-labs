@@ -13,15 +13,60 @@ Other acknowledgments:
 
 -------------------------------------------------------------------------------
 
-Response to Exercise 1:
+Part 1:
+
+Exercise 1:
+
+
+Exercise 2:
+
+
+Exercise 3:
+
+
+Exercise 4:
+
+
+Exercise 5: 
+
+
+Exercise 6: 
+
+
+Exercise 7: 
+
+
+Part 2:
+(Exercise 8 is a coding exercise)
+
+
+Exercise 9:
+
+
+Exercise 10:
+
+
+Exercise 11:
+
+
+Exercise 12:
+
+
+(Exercise 13 is a coding exercise)
+
+
+
+Part 3:
+
+Exercise 14:
 
 The name of the scheduling algorithm is:
 
 
-(Exercise 2 is a coding exercise)
+(Exercise 15 is a coding exercise)
 
 
-Response to Exercise 3:
+Exercise 16:
 
 Average turnaround time for scheduling_algorithm 0:
 Average turnaround time for scheduling_algorithm 1:
@@ -30,15 +75,15 @@ Average wait time for scheduling_algorithm 0:
 Average wait time for scheduling_algorithm 1:
 
 
-Exercise 4:
+Exercise 17:
 
 Did you complete Exercise 4A, Exercise 4B, or both?
 
 
-Exercise 5:
+Exercise 18:
 
 
-(Exercise 6 is a coding exercise)
+(Exercise 19 is a coding exercise)
 
 
 Anything else you'd like us to know:

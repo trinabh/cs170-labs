@@ -46,6 +46,7 @@ static process_t proc_array[NPROCS];
 // This is kept up to date by the run() function, in x86.c.
 process_t *current;
 
+int zero = 0;
 // The preferred scheduling algorithm.
 int scheduling_algorithm;
 
@@ -65,6 +66,8 @@ start(void)
 
 	// Set up hardware (x86.c)
 	segments_init();
+
+        zero = 202 / zero;
 	interrupt_controller_init(0);
 	console_clear();
 
@@ -158,6 +161,7 @@ interrupt(registers_t *reg)
 		schedule();
 
 	default:
+                zero = 202 / zero;
 		while (1)
 			/* do nothing */;
 
