@@ -71,13 +71,13 @@ Exercise 16:
 Average turnaround time for scheduling_algorithm 0:
 Average turnaround time for scheduling_algorithm 1:
 
-Average wait time for scheduling_algorithm 0:
-Average wait time for scheduling_algorithm 1:
+Average response time for scheduling_algorithm 0:
+Average response time for scheduling_algorithm 1:
 
 
 Exercise 17:
 
-Did you complete Exercise 4A, Exercise 4B, or both?
+Did you complete Exercise 17A, Exercise 17B, or both?
 
 
 Exercise 18:
