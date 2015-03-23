@@ -32,7 +32,7 @@ handin-check:
 	fi
 
 tarball-check: handin-check
-	@for lab in $(shell seq 1 $(LAB)); do \
+	-@for lab in $(shell seq 1 $(LAB)); do \
 		$(MAKE) -C lab$${lab} realclean; \
 	done
 

@@ -1,0 +1,10 @@
+*~
+core*
+log.txt
+os[0-9]*.img
+obj
+pset.tgz
+weensyos.img
+*.tgz
+*.deps
+.gdbinit
