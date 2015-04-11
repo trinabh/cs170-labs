@@ -1,0 +1,11 @@
+/build
+/mnt
+*.out
+*.pyc
+.*.swp
+*~
+*.img
+fs.out.*
+/x-filesys-sol
+/x-filesys-lab
+lab?-handin.tar.gz
