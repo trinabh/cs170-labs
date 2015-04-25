@@ -1,7 +1,9 @@
 BUILD := build
 
 FUSE_CFLAGS := -DFUSE_USE_VERSION=26 $(shell pkg-config --cflags fuse 2>/dev/null)
+FUSE_CFLAGS += -I ../fuse/include/fuse -D_FILE_OFFSET_BITS=64
 FUSE_LDFLAGS := $(shell pkg-config --libs fuse 2>/dev/null)
+FUSE_LDFLAGS += -L ../fuse/ -lfuse -pthread
 
 EXTRA_CFLAGS ?=
 
@@ -21,6 +23,31 @@ FSDRIVER_OBJS	:= $(patsubst %.o,$(BUILD)/%.o,$(FSDRIVER_OBJS))
 all: $(BUILD)/fsdriver $(BUILD)/fsformat send_ioctl
 	@:
 
+#if SOL >= 999
+LAB_PATS :=	*.c *.h *.bash *.sh
+LAB_DIRS :=	. test
+LAB_FILES =	COPYRIGHT \
+		Makefile \
+		.gitignore \
+		gradelib.py \
+		grade-lab \
+		chmod-walk \
+		answers.txt \
+		install-lab7-for-cims.sh \
+		check-lab.sh \
+		$(wildcard $(foreach dir,$(LAB_DIRS),$(addprefix $(dir)/,$(LAB_PATS))))
+
+sol: override CFLAGS+=-DSOL=1
+sol: all
+
+export-sol: always
+	rm -rf x-filesys-sol
+	./mklab.pl 1 1 x-filesys-sol $(LAB_FILES)
+
+export-lab: always
+	rm -rf x-filesys-lab
+	./mklab.pl 1 0 x-filesys-lab $(LAB_FILES)
+#endif
 
 $(BUILD)/%.o: %.c
 	@mkdir -p $(@D)
@@ -44,7 +71,11 @@ clean:
 grade: always
 	@echo $(MAKE) clean
 	@$(MAKE) -s --no-print-directory clean
+	@test -d mnt || mkdir mnt
 	./grade-lab
+
+always:
+	-@fusermount -u mnt
 
 .PHONY: clean always
 
