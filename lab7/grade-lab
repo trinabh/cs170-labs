@@ -1,0 +1,47 @@
+#!/usr/bin/env python2
+
+from gradelib import *
+
+r = Runner()
+
+def matchtest(parent, name, points, *args, **kw):
+    def do_test():
+        r.match(*args, **kw)
+    test(points, name, parent=parent)(do_test)
+
+@test(10, "basic operations test")
+def test_basic_ops():
+    r.run_test("test/test_basic.bash")
+    r.match("basic operations pass")
+
+@test(10, "touch file test")
+def test_touch():
+    r.run_test("test/test_touch_crash.bash")
+    r.match("touch crash pass")
+
+@test(10, "echo test")
+def test_touch():
+    r.run_test("test/test_echo_crash.bash")
+    r.match("echo crash pass")
+
+@test(10, "truncate file test")
+def test_truncate():
+    r.run_test("test/test_truncate_crash.sh")
+    r.match("truncate crash pass")
+
+@test(20, "mv file test")
+def mv_test():
+    r.run_test("test/test_mv_crash.sh")
+    r.match("mv crash pass")
+
+@test(20, "stress test/big txn test")
+def big_txn():
+    r.run_test("test/test_big_txn.sh")
+    r.match("big txn pass")
+
+@test(20, "stress test/many txns test")
+def many_txns():
+    r.run_test("test/test_many_txns.bash")
+    r.match("many txns pass")
+
+run_tests()
