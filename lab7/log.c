@@ -44,9 +44,8 @@ log_tx_add(operation_t op, const log_args_t *log_args, time_t time)
  *             - uses msync to persist the entire log. This is *NOT* atomic,
  *               since it's more than one sector size.
  *             - increments the log->nentries, so that the newly appended
- *               *commit* entry will be seen.
- *             - uses msync to persist first sector of log. This will persist
- *               log->nentries atomically.
+ *               *commit* entry will be replayed.
+ *             - uses msync to persist the first sector of log. This disk write is done atomically.
  * Return TX_COMMIT once the commit entry has persisted to disk.
  *
  */
@@ -157,9 +156,12 @@ log_entry_install(const struct log_entry* entry) {
 
 /*
  * log_reply: Scan through committed transactions and apply their effects
- * by using log_entry_install.
- * Go through all log entries twice. In the first path, find all commited txn_ids.
- * In the second pass, replay all log entries with a commited txn_id.
+ *      by using log_entry_install.
+ * Go through all log entries twice. In the first pass, find all committed txn_ids.
+ * In the second pass, replay all log entries with a committed txn_id.
+ *
+ * You may need to use malloc() and free(). If you use malloc(), be sure
+ * to include an appropriate free() call.
  */
 void
 log_replay() {
