@@ -14,8 +14,8 @@ gcc send_ioctl.c -o ${ioctl_exec}
 
 fuse_unmount
 generate_test_msg
-make_fsimg build/msg
-fuse_mount #--test-ops
+make_fsimg
+fuse_mount
 
 # touch file and commit
 touch mnt/hello
@@ -31,7 +31,7 @@ test -f mnt/hello && fail "uncommitted write found"
 
 fuse_unmount
 generate_test_msg
-make_fsimg build/msg
+make_fsimg
 fuse_mount
 
 touch mnt/hello
@@ -47,3 +47,4 @@ fuse_mount
 test -f mnt/hello || fail "commit lost"
 
 echo "touch crash pass"
+fuse_unmount &>/dev/null

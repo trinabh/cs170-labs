@@ -13,8 +13,8 @@ gcc send_ioctl.c -o ${ioctl_exec}
 
 fuse_unmount
 generate_test_msg
-make_fsimg build/msg
-fuse_mount #--test-ops
+make_fsimg
+fuse_mount
 
 last_it=
 n_iterations=128
@@ -56,3 +56,4 @@ do
 done
 
 echo "big txn pass"
+fuse_unmount &>/dev/null

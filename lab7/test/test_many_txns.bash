@@ -13,8 +13,8 @@ gcc send_ioctl.c -o ${ioctl_exec}
 
 fuse_unmount
 generate_test_msg
-make_fsimg build/msg
-fuse_mount #--test-ops
+make_fsimg
+fuse_mount
 
 n_rubbish_logs=20
 for nr in $(seq 1 ${n_rubbish_logs})
@@ -87,3 +87,4 @@ do
 done
 
 echo "many txns pass"
+fuse_unmount &>/dev/null

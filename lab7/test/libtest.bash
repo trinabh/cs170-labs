@@ -31,6 +31,7 @@ recreate_mnt() {
 
 make_fsimg() {
 	build/fsformat testfs.img 32768 $@ || fail "couldn't make test image"
+	#build/fsformat testfs.img 2048 $@ || fail "couldn't make test image"
 }
 
 fuse_mount() {

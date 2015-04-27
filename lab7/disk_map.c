@@ -12,10 +12,17 @@
 
 uint32_t		*bitmap;
 struct superblock	*super;
+struct log		*s_log;
 struct stat		 diskstat;
 uint8_t			*diskmap;
 const char		*loaded_imgname;
 const char		*loaded_mntpoint;
+
+uint32_t
+ino2inum(struct inode *ino)
+{
+	return ((uintptr_t)ino - (uintptr_t)diskmap) / BLKSIZE;
+}
 
 // Maps a block number to an address.  The pointer returned
 // points to the first byte of the specified block in mapped memory.
@@ -57,7 +64,7 @@ map_disk_image(const char *imgname, const char *mntpoint)
 	super = (struct superblock *)diskmap; // = diskmap(0)
 	bitmap = diskaddr(1);
 
-	super->s_log = (void*)((char*)(diskmap + super->s_nblocks * BLKSIZE));
+	s_log = (struct log*)((char*)(diskmap + super->s_nblocks * BLKSIZE));
 
 	loaded_imgname = imgname;
 	loaded_mntpoint = mntpoint;

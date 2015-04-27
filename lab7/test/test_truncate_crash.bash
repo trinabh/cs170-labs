@@ -13,8 +13,8 @@ gcc send_ioctl.c -o ${ioctl_exec}
 
 fuse_unmount
 generate_test_msg
-make_fsimg build/msg
-fuse_mount #--test-ops
+make_fsimg
+fuse_mount
 
 # create file and crash without commit, should have no file
 touch mnt/hello || fail "should not crash here"
@@ -41,3 +41,4 @@ t_size=`stat mnt/hello --format="%s"`
 test ${t_size} -eq ${size} || fail "file size incorrect after crash"
 
 echo "truncate crash pass"
+fuse_unmount &>/dev/null

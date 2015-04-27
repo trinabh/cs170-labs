@@ -95,11 +95,11 @@ opendisk(const char *name, struct IDir *iroot)
 		panic("open %s: %s", name, strerror(errno));
 
 	if ((r = ftruncate(diskfd, 0)) < 0
-	    || (r = ftruncate(diskfd, disksize)) < 0)
+		|| (r = ftruncate(diskfd, disksize)) < 0)
 		panic("truncate %s: %s", name, strerror(errno));
 
 	if ((diskmap = mmap(NULL, disksize, PROT_READ|PROT_WRITE,
-			    MAP_SHARED, diskfd, 0)) == MAP_FAILED)
+				MAP_SHARED, diskfd, 0)) == MAP_FAILED)
 		panic("mmap %s: %s", name, strerror(errno));
 
 	close(diskfd);
@@ -127,14 +127,12 @@ opendisk(const char *name, struct IDir *iroot)
 	// add log
 	struct log* l;
 	l = (void*)(diskmap + nblocks * BLKSIZE);
-	l->head = 0;
-	l->tail = 1;
-	l->entries[0].id = 0;
-	l->entries[0].op = OP_NOOP;
-	l->entries[0].t_no = 0;
-	l->entries[0].prev = 0;
-	strcpy(l->entries[0].data, "Hello, world!");
-	super->s_log = l;
+	l->nentries = 1;
+	l->txn_id = 0;
+	l->entries[0].txn_id = 0;
+	l->entries[0].op = OP_INIT;
+	l->entries[0].time = time(NULL);
+	strcpy(l->entries[0].args.init_args.msg, "Hello world");
 }
 
 void
@@ -164,7 +162,7 @@ finishinode(struct inode *inode, uint32_t start, uint32_t len)
 		inode->i_direct[i] = start + i;
 
 	if(i == N_DIRECT)
-                assert(0);
+		assert(0);
 }
 
 void
@@ -195,7 +193,7 @@ idiradd(struct IDir *id, uint32_t mode, const char *name)
 		if(!(p = realloc(id->ents,
 				 id->capacity * sizeof(struct dirent))))
 			panic("ran out of memory trying to add directory "
-			      "entry");
+				  "entry");
 		id->ents = p;
 	}
 
@@ -291,7 +289,6 @@ main(int argc, char **argv)
 	finishdisk();
 
 	printf("about to exit\n");
-	printf("super->s_log->head: %d\n", super->s_log->head);
 
 	return 0;
 }

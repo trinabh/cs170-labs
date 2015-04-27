@@ -1,0 +1,10 @@
+/build
+/send_ioctl
+/mnt
+*.out
+*.pyc
+.*.swp
+*~
+*.img
+fs.out.*
+lab?-handin.tar.gz

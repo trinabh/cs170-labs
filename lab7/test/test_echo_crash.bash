@@ -13,8 +13,8 @@ gcc send_ioctl.c -o ${ioctl_exec}
 
 fuse_unmount
 generate_test_msg
-make_fsimg build/msg
-fuse_mount #--test-ops
+make_fsimg
+fuse_mount
 
 # create file and crash without commit, should have no file
 echo "secret" > mnt/hello || fail "should not crash here"
@@ -33,7 +33,7 @@ ok "no uncommitted file"
 
 fuse_unmount
 generate_test_msg
-make_fsimg build/msg
+make_fsimg
 fuse_mount
 
 echo "secret" > mnt/hello || fail "should not crash here"
@@ -47,3 +47,4 @@ content=`cat mnt/hello`
 test "${content}" == "secret" || fail "write to file lost"
 
 echo "echo crash pass"
+fuse_unmount &>/dev/null

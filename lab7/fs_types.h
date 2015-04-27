@@ -8,8 +8,6 @@
 #include <time.h>
 #include <unistd.h>
 
-#include "log.h"
-
 // The maximum length of a single file name, including
 // the null-terminator.
 #undef NAME_MAX
@@ -19,6 +17,8 @@
 // the root directory, including the null-terminator.
 #undef PATH_MAX
 #define PATH_MAX		1024
+
+#define SECTORSIZE		512
 
 // The size of a block in the file system.
 #define BLKSIZE			4096
@@ -64,8 +64,6 @@ struct superblock {
 	uint32_t	s_magic; // Magic number: FS_MAGIC.
 	uint32_t	s_nblocks; // Total number of blocks on disk.
 	uint32_t	s_root; // Inum of the root directory inode.
-	struct log*		s_log;
-	//uint32_t 	s_log; // Inum of log
 } __attribute__((packed));
 
 // Efficient min and max operations

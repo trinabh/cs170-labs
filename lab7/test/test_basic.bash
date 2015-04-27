@@ -13,8 +13,8 @@ gcc send_ioctl.c -o ${ioctl_exec}
 
 fuse_unmount
 generate_test_msg
-make_fsimg build/msg
-fuse_mount #--test-ops
+make_fsimg
+fuse_mount
 
 
 touch mnt/hello || fail "touch fail"
@@ -48,3 +48,4 @@ new_inum=`ls -i mnt/hello2 | cut -d' ' -f1`
 test ${new_inum} -eq ${old_inum} || fail "mv fail"
 
 echo "basic operations pass"
+fuse_unmount &>/dev/null

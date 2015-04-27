@@ -136,26 +136,29 @@ inode_read(struct inode *ino, void *buf, size_t count, uint32_t offset)
 	for (pos = offset; pos < offset + count; ) {
 		if ((r = inode_block_walk(ino, pos / BLKSIZE, &pblkno, 0)) < 0)
 			switch (-r) {
-			case ENOENT: // For sparse files.
-				pblkno = NULL;
-				break;
-			default:
-				return r;
+				case ENOENT: // For sparse files.
+					pblkno = NULL;
+					break;
+				default:
+					return r;
 			}
 		bn = MIN(BLKSIZE - pos % BLKSIZE, offset + count - pos);
-	dec();
+		dec();
 		// Handle sparse files.  If no block has been allocated for
 		// this region of the file, fill the read buffer with zeroes.
-		if (pblkno == NULL || *pblkno == 0)
-			memset(buf, 0, bn);
-		else {
-	dec();
+		if (pblkno == NULL || *pblkno == 0) {
+			if (buf)
+				memset(buf, 0, bn);
+		} else {
+			dec();
 			blk = diskaddr(*pblkno);
-			memmove(buf, blk + pos % BLKSIZE, bn);
+			if (buf)
+				memmove(buf, blk + pos % BLKSIZE, bn);
 		}
 		pos += bn;
-		buf += bn;
-	dec();
+		if (buf)
+			buf += bn;
+		dec();
 	}
 
 	return count;
@@ -184,9 +187,9 @@ inode_write(struct inode *ino, const void *buf, size_t count, uint32_t offset)
 		if ((r = inode_get_block(ino, pos / BLKSIZE, &blk)) < 0)
 			return r;
 		bn = MIN(BLKSIZE - pos % BLKSIZE, offset + count - pos);
-	dec();
+		dec();
 		memmove(blk + pos % BLKSIZE, buf, bn);
-	dec();
+		dec();
 		pos += bn;
 		buf += bn;
 	}
@@ -207,16 +210,16 @@ inode_free_block(struct inode *ino, uint32_t filebno)
 
 	if ((r = inode_block_walk(ino, filebno, &ptr, 0)) < 0)
 		switch (-r) {
-		// Ignore not found error for sparse files.
-		case ENOENT:
-			return 0;
-		default:
-			return r;
+			// Ignore not found error for sparse files.
+			case ENOENT:
+				return 0;
+			default:
+				return r;
 		}
 	dec();
 	if (*ptr) {
 		free_block(*ptr);
-	dec();
+		dec();
 		*ptr = 0;
 	}
 	return 0;
@@ -280,9 +283,9 @@ inode_flush(struct inode *ino)
 
 	for (i = 0; i < (ino->i_size + BLKSIZE - 1) / BLKSIZE; i++) {
 		if (inode_block_walk(ino, i, &pdiskbno, 0) < 0 ||
-		    pdiskbno == NULL || *pdiskbno == 0)
+				pdiskbno == NULL || *pdiskbno == 0)
 			continue;
-	dec();
+		dec();
 		flush_block(diskaddr(*pdiskbno));
 	}
 	dec();
@@ -338,14 +341,14 @@ inode_unlink(const char *path)
 	path = path + 1;
 	ino = diskaddr(super->s_root);
 	for (i = 0; i < N_DIRECT; ++i) {
-	dec();
+		dec();
 		if (! ino->i_direct[i]) {continue;}
 		d = diskaddr(ino->i_direct[i]);
-	dec();
+		dec();
 		for (j = 0; j < BLKDIRENTS; ++j) {
 			if (! strcmp(d[j].d_name, path)) {
 				if (! --((struct
-					inode*)diskaddr(d[j].d_inum))->i_nlink)
+								inode*)diskaddr(d[j].d_inum))->i_nlink)
 				{
 					inode_free(d[j].d_inum);
 				}
@@ -353,7 +356,7 @@ inode_unlink(const char *path)
 				d[j].d_name[0] = '\0';
 				return 0;
 			}
-	dec();
+			dec();
 		}
 	}
 	return -ENOENT;
@@ -381,34 +384,34 @@ inode_link(const char *srcpath, const char *dstpath)
 	dstpath = dstpath + 1;
 	ino = diskaddr(super->s_root);
 	for (i = 0; i < N_DIRECT; ++i) {
-	dec();
+		dec();
 		if (! ino->i_direct[i]) {continue;}
 		d = diskaddr(ino->i_direct[i]);
-	dec();
+		dec();
 		for (j = 0; j < BLKDIRENTS; ++j) {
 			if (! strcmp(d[j].d_name, dstpath)) {
-	dec();
+				dec();
 				return -EEXIST;
 			}
 			if (! strcmp(d[j].d_name, srcpath)) {
 				k = d[j].d_inum;
 			}
-	dec();
+			dec();
 		}
 	}
 	if (!k) return -ENOENT;
 	for (i = 0; i < N_DIRECT; ++i) {
-	dec();
+		dec();
 		if (! ino->i_direct[i]) {continue;}
 		d = diskaddr(ino->i_direct[i]);
-	dec();
+		dec();
 		for (j = 0; j < BLKDIRENTS; ++j) {
 			if (! d[j].d_inum) {
 				d[j].d_inum = k;
-	dec();
+				dec();
 				strcpy(d[j].d_name, dstpath);
 				((struct inode*)diskaddr(k))->i_nlink++;
-	dec();
+				dec();
 				return 0;
 			}
 		}
