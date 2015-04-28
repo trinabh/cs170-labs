@@ -143,11 +143,21 @@ struct log_entry {
 } __attribute__((aligned(SECTORSIZE)));
 
 struct log {
-	uint32_t txn_id;	// the current transaction id, should be advacned by 1 when *commit* is called
+	uint32_t txn_id;	// the current transaction id; see comment below
 	uint32_t nentries;	// number of entries in the log
 	char padding[SECTORSIZE - sizeof(uint32_t) - sizeof(uint32_t)];
 	struct log_entry entries[LOGSIZE];
 } __attribute__((aligned(SECTORSIZE)));
+
+// Some words about txn_id:
+//    Each transaction has a different txn_id; all log entries belonging
+//    to the same transaction have the same txn_id.
+//
+//    To guarantee that two different transactions have different
+//    txn_ids, we increment txn_id after each commit, and make sure that
+//    the first sector of the log has the updated txn_id.
+//
+
 
 // log interface
 void log_tx_add(operation_t op, const log_args_t *log_args, time_t time);

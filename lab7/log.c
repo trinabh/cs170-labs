@@ -40,9 +40,9 @@ log_tx_add(operation_t op, const log_args_t *log_args, time_t time)
 /*
  * log_tx_done - sets next available log->entries to be the *commit* entry
  *               and sets corresponding fields to be log->txn_id, OP_COMMIT
- *             - increments the transaction id of the log
  *             - uses msync to persist the entire log. This is *NOT* atomic,
  *               since it's more than one sector size.
+ *             - increments the transaction id of the log
  *             - increments the log->nentries, so that the newly appended
  *               *commit* entry will be replayed.
  *             - uses msync to persist the first sector of log. This disk write is done atomically.
@@ -63,6 +63,9 @@ int
 log_tx_abandon()
 {
 	++s_log->txn_id;
+	if ((r = msync(log, SECTORSIZE, MS_SYNC)) < 0) {
+		panic("msync: %s", strerror(errno));
+	}
 	return TX_INVALID;
 }
 
