@@ -63,7 +63,8 @@ int
 log_tx_abandon()
 {
 	++s_log->txn_id;
-	if ((r = msync(log, SECTORSIZE, MS_SYNC)) < 0) {
+    int r;
+	if ((r = msync(s_log, SECTORSIZE, MS_SYNC)) < 0) {
 		panic("msync: %s", strerror(errno));
 	}
 	return TX_INVALID;
