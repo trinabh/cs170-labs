@@ -63,7 +63,7 @@ int
 log_tx_abandon()
 {
 	++s_log->txn_id;
-    int r;
+        int r;
 	if ((r = msync(s_log, SECTORSIZE, MS_SYNC)) < 0) {
 		panic("msync: %s", strerror(errno));
 	}
@@ -161,11 +161,18 @@ log_entry_install(const struct log_entry* entry) {
 /*
  * log_reply: Scan through committed transactions and apply their effects
  *      by using log_entry_install.
- * Go through all log entries twice. In the first pass, find all committed txn_ids.
- * In the second pass, replay all log entries with a committed txn_id.
  *
- * You may need to use malloc() and free(). If you use malloc(), be sure
- * to include an appropriate free() call.
+ * There are several ways to do this. 
+ * 
+ *   One way is go through all log entries twice. In the first pass,
+ *   find all committed txn_ids.  In the second pass, replay all log
+ *   entries with a committed txn_id.  You may need to use malloc() and
+ *   free(). If you use malloc(), be sure to include an appropriate
+ *   free() call.
+ * 
+ * There is also a single-pass solution; in that solution, it may be helpful to
+ *   conceptualize the required logic as a finite state machine.
+ *
  */
 void
 log_replay() {
