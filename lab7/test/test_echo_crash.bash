@@ -12,7 +12,7 @@ commit=4000
 gcc send_ioctl.c -o ${ioctl_exec}
 
 fuse_unmount
-generate_test_msg
+recreate_mnt
 make_fsimg
 fuse_mount
 
@@ -32,7 +32,7 @@ test -f mnt/hello && fail "uncommitted stuff found"
 ok "no uncommitted file"
 
 fuse_unmount
-generate_test_msg
+recreate_mnt
 make_fsimg
 fuse_mount
 

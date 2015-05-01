@@ -25,9 +25,9 @@
  *
  * Hint:
  *      Don't forget to increment log->nentries after you are done
- *      Your code should also handle the case where log_args == NULL
- *          where you simply logs the op code, time stamp and increments the
- *          nentries counter
+ *      Your code should also handle the case where log_args == NULL;
+ *          in that case, you should simply log the op code and time stamp,
+ *          and increment the nentries counter
  */
 void
 log_tx_add(operation_t op, const log_args_t *log_args, time_t time)
@@ -70,7 +70,7 @@ log_tx_abandon()
 	return TX_INVALID;
 }
 
-// Takes a single entry and *install* it onto the disk by calling the correct
+// Takes a single entry and *installs* it onto the disk by calling the correct
 // function with the correct arguments.
 void
 log_entry_install(const struct log_entry* entry) {
@@ -159,17 +159,17 @@ log_entry_install(const struct log_entry* entry) {
 }
 
 /*
- * log_reply: Scan through committed transactions and apply their effects
+ * log_replay: Scan through committed transactions and apply their effects
  *      by using log_entry_install.
  *
- * There are several ways to do this. 
- * 
+ * There are several ways to do this.
+ *
  *   One way is go through all log entries twice. In the first pass,
  *   find all committed txn_ids.  In the second pass, replay all log
  *   entries with a committed txn_id.  You may need to use malloc() and
  *   free(). If you use malloc(), be sure to include an appropriate
  *   free() call.
- * 
+ *
  * There is also a single-pass solution; in that solution, it may be helpful to
  *   conceptualize the required logic as a finite state machine.
  *

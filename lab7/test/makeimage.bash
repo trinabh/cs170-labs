@@ -2,7 +2,5 @@
 
 . test/libtest.bash
 
-fuse_unmount
-generate_test_msg
-make_fsimg build/msg
+make_fsimg
 echo "makeimage pass"

@@ -13,7 +13,7 @@ commit=4000
 gcc send_ioctl.c -o ${ioctl_exec}
 
 fuse_unmount
-generate_test_msg
+recreate_mnt
 make_fsimg
 fuse_mount
 
@@ -25,7 +25,6 @@ test -f mnt/hello || fail "touch file failed"
 # mv hello to hello2, crash in the middle
 ${txn} ${unlink_crash}
 old_content=`cat mnt/hello`
-old_inum=`ls -i mnt/hello | cut -d' ' -f1`
 mv mnt/hello mnt/hello2 && fail "should crash here"
 
 fuse_unmount
@@ -35,9 +34,9 @@ test -f mnt/hello || fail "missing mnt/hello"
 test -f mnt/hello2 && fail "wrong file found"
 
 new_content=`cat mnt/hello`
-new_inum=`ls -i mnt/hello | cut -d' ' -f1`
+nlink=`stat --format="%h" mnt/hello`
 test "${old_content}" == "${new_content}" || fail "incorrect content"
-test ${old_inum} -eq ${new_inum} || fail "incorrect i-num"
+test ${nlink} -eq 1 || fail "incorrect link count"
 
 mv mnt/hello mnt/hello2 || fail "should not crash here"
 ${txn} ${commit} || fail "should not crash here"
@@ -51,9 +50,9 @@ test -f mnt/hello && fail "mv fail"
 test -f mnt/hello2 || fail "mv fail"
 
 new_content=`cat mnt/hello2`
-new_inum=`ls -i mnt/hello2 | cut -d' ' -f1`
+nlink=`stat --format="%h" mnt/hello2`
 test "${old_content}" == "${new_content}" || fail "incorrect content"
-test ${old_inum} -eq ${new_inum} || fail "incorrect i-num"
+test ${nlink} -eq 1 || fail "incorrect link count"
 
 echo "mv crash pass"
 fuse_unmount &>/dev/null

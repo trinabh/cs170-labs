@@ -12,7 +12,7 @@ commit=4000
 gcc send_ioctl.c -o ${ioctl_exec}
 
 fuse_unmount
-generate_test_msg
+recreate_mnt
 make_fsimg
 fuse_mount
 
@@ -46,6 +46,8 @@ test -f mnt/hello2 || fail "mv fail"
 new_inum=`ls -i mnt/hello2 | cut -d' ' -f1`
 
 test ${new_inum} -eq ${old_inum} || fail "mv fail"
+
+${txn} ${commit} || fail "commit fail"
 
 echo "basic operations pass"
 fuse_unmount &>/dev/null

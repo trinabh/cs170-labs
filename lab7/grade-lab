@@ -9,42 +9,55 @@ def matchtest(parent, name, points, *args, **kw):
         r.match(*args, **kw)
     test(points, name, parent=parent)(do_test)
 
-@test(5, "basic operations test")
+@test(5, "basic operations test (test/test_basic.bash)")
 def test_basic_ops():
     r.run_test("test/test_basic.bash")
     r.match("basic operations pass")
 
-@test(5, "touch file test")
-def test_touch():
-    r.run_test("test/test_basic.bash")
-    r.match("basic operations pass")
+@test(20, "replay test (test/test_replay.bash)")
+def test_replay():
+    r.run_test("test/test_replay.bash")
+    r.match("replay pass")
 
-@test(10, "echo test")
+@test(5, "touch file test (test/test_touch_crash.bash)")
+def test_touch():
+    r.run_test("test/test_touch_crash.bash")
+    r.match("touch crash pass")
+
+@test(5, "echo test (test/test_echo_crash.bash)")
 def test_touch():
     r.run_test("test/test_echo_crash.bash")
     r.match("echo crash pass")
 
-@test(10, "time test")
+@test(5, "time test (test/test_time_crash.bash)")
 def test_touch():
     r.run_test("test/test_time_crash.bash")
     r.match("time crash pass")
 
-@test(10, "truncate file test")
+@test(5, "truncate file test (test/test_truncate_crash.bash)")
 def test_truncate():
     r.run_test("test/test_truncate_crash.bash")
     r.match("truncate crash pass")
 
-@test(20, "mv file test")
+@test(5, "mv file test (test/test_mv_crash.bash)")
 def mv_test():
     r.run_test("test/test_mv_crash.bash")
     r.match("mv crash pass")
 
-@test(20, "stress test/big txn test")
+@test(0, "link/unlink test (test/test_link_crash.bash)")
+def test_link_ops():
+    r.run_test("test/test_link_crash.bash")
+matchtest(test_link_ops, "link test", 5,
+          "link crash pass")
+matchtest(test_link_ops, "unlink test", 5,
+          "unlink crash pass")
+
+@test(20, "stress test/big txn test (test/test_big_txn.bash)")
 def big_txn():
     r.run_test("test/test_big_txn.bash")
     r.match("big txn pass")
 
-@test(20, "stress test/many txns test")
+@test(20, "stress test/many txns test (test/test_many_txns.bash)")
 def many_txns():
     r.run_test("test/test_many_txns.bash")
     r.match("many txns pass")
