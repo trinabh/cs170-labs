@@ -50,7 +50,7 @@ test ${nlink} -eq 2 || fail "incorrect link count"
 
 echo "link crash pass"
 
-rm mnt/hello
+rm -f mnt/hello
 
 sleep 1
 
