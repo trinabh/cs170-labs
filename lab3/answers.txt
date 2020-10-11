@@ -1,6 +1,5 @@
 Name:
-net ID:
-NYU ID(N#):
+PERM #: 
 
 Collaborators (who you talked to about the lab, what you talked about):
 
@@ -13,7 +12,7 @@ Other acknowledgments:
 
 -------------------------------------------------------------------------------
 
+Responses to exercises (if any) that need to go into answers.txt:
+
+
 Anything else you'd like us to know:
-
-
-Extra credit exercise(s) (describe what you coded):
