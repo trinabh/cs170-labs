@@ -1,5 +1,5 @@
 Name:
-NYU ID:
+PERM #:
 
 Collaborators (who you talked to about the lab, what you talked about):
 
@@ -11,15 +11,8 @@ Other acknowledgments:
 
 -------------------------------------------------------------------------------
 
-Response to Exercise 5:
+Responses to exercises:
 
 
 
 Anything else you'd like us to know:
-
-
-
-Honors exercises (describe the solution that you coded):
-
-
-Extra credit exercise (describe the solution that you coded):
