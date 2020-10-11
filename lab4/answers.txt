@@ -1,6 +1,5 @@
 Name:
-net ID:
-NYU ID(N#):
+PERM #:
 
 Collaborators (who you talked to about the lab, what you talked about):
 
@@ -89,4 +88,3 @@ Exercise 18:
 Anything else you'd like us to know:
 
 
-Honors supplement exercise(s) (describe what you coded):
