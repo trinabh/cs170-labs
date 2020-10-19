@@ -76,12 +76,13 @@ main(int argc, char *argv[])
 			fflush(stdout);
 		}
 
-                // this actually invokes the command list.
-                // you will fill in cmd_line_exec.
+    // this actually invokes the command list.
+    // you will fill in cmd_line_exec.
 		if (!parseonly && cmdlist)
 			cmd_line_exec(cmdlist);
-                if (cmdlist)
-                        cmd_free(cmdlist);
+
+    if (cmdlist)
+      cmd_free(cmdlist);
 
 	}
 

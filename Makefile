@@ -1,6 +1,6 @@
 LAB=2
 # 
-# NYU CS 202 - Spring 2015 - Lab
+# UCSB CS 170 - Fall 2020 - Lab (This file is borrowed from NYU CS 202)
 # 
 
 # Handin
