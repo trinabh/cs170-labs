@@ -1,5 +1,6 @@
 /*
- * NYU CS 202 - Spring 2015 - Lab 2
+ * UCSB CS 170
+ *   (Derived from NYU CS 202.)
  *   (Derived from Eddie Kohler's UCLA shell lab.)
  * Skeleton code for Lab 2 - Shell processing
  * This file contains skeleton code for executing parsed commands.
@@ -102,7 +103,7 @@
 static pid_t
 cmd_exec(command_t *cmd, int *pass_pipefd)
 {
-        (void)pass_pipefd;      // get rid of unused warning
+  (void)pass_pipefd;      // get rid of unused warning
 	pid_t pid = -1;		// process ID for child
 	int pipefd[2];		// file descriptors for this process's pipe
 
@@ -262,7 +263,7 @@ cmd_line_exec(command_t *cmdlist)
 		cmdlist = cmdlist->next;
 	}
 
-        while (waitpid(0, 0, WNOHANG) > 0);
+  while (waitpid(0, 0, WNOHANG) > 0);
 
 done:
 	return cmd_status;

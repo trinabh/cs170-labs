@@ -3,7 +3,8 @@
 #include <unistd.h>
 
 /*
- * NYU CS 202 - Spring 2015 - Lab 2
+ * UCSB CS 170
+ *   (Derived from NYU CS 202.)
  *   (Derived from Eddie Kohler's UCLA shell lab.)
  * Header file for commandline parsing for Lab 2 - Shell processing
  * This file contains the definitions required for parsing input
@@ -46,9 +47,9 @@ typedef enum {
  */
 
 typedef struct {
-	char *position;		// Portion of command line yet to be parsed
+	char *position;		    // Portion of command line yet to be parsed
 	char *last_position;	// 'position' from last token, allowing
-				// one token's worth of rollback
+				                // one token's worth of rollback
 } parsestate_t;
 
 
@@ -58,7 +59,7 @@ typedef struct {
  */
 
 typedef struct {
-	tokentype_t type;	    // Type of this token
+	tokentype_t type;	          // Type of this token
 	char buffer[TOKENSIZE];	    // Stores the current token
 } token_t;
 

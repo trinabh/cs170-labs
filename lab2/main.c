@@ -1,5 +1,6 @@
 /*
- * NYU CS 202 - Spring 2015 - Lab 2
+ * UCSB CS 170
+ *   (Derived from NYU CS 202.)
  *   (Derived from Eddie Kohler's UCLA shell lab.)
  * Skeleton code for Lab 2 - Shell processing
  */
