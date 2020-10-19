@@ -386,12 +386,12 @@ cmd_line_parse(parsestate_t *parsestate, int in_parens)
 		case TOK_DOUBLEAMP:
 		case TOK_DOUBLEPIPE:
 		case TOK_PIPE:
-			cmd->controlop = token.type;
+			cmd->controlop = (controlop_t) token.type;
 			break;
 
 		case TOK_SEMICOLON:
 		case TOK_AMPERSAND:
-			cmd->controlop = token.type;
+			cmd->controlop = (controlop_t) token.type;
 			parse_gettoken(parsestate, &token);
 			if (token.type == TOK_END || token.type == TOK_CLOSE_PAREN)
 				goto ender;
