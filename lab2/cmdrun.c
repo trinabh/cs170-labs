@@ -206,7 +206,7 @@ cmd_exec(command_t *cmd, int *pass_pipefd)
 	//    does foo appear, /tmp or $HOME?  If you chdir() BEFORE the fork,
 	//    in which directory would foo appear, /tmp or $HOME?
 	//
-	//    EXTRA CREDIT: Our "cd" solution changes the
+	//    Our "cd" solution changes the
 	//    directory both in the parent process and in the child process.
 	//    This introduces a potential race condition.
 	//    Explain what that race condition is, and fix it.
