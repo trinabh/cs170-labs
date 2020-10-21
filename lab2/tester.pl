@@ -146,6 +146,14 @@ $rev = 'rev';
 	    '( echo Line )',
 	    'Line' ],
 
+    [ '',
+      '( echo hello ) ( echo hello )',
+      'Syntax error' ],
+
+    [ '',
+      'ls ( echo hello )',
+      'Syntax error' ],
+
 	  [ '',
 	    '( echo Hello ; echo World ) | wc -l',
 	    '2' ],
@@ -235,6 +243,10 @@ $rev = 'rev';
 	    'cd / ; cd /usr ; pwd',
 	    '/usr' ],
 
+    [ '',
+	    'cd / /usr',
+	    'cd: Syntax error! Wrong number of arguments!' ],
+
 # cd without redirecting stdout
 	  [ '',
 	    'cd / ; cd /doesnotexist 2> /dev/null ; pwd',
@@ -287,9 +299,13 @@ $rev = 'rev';
 	    '( exit ) ; echo After',
 	    'After' ],
 
+    [ '',
+      'exit 1 2 > temp.out 2> temp2.out; echo Line1',
+      'Line1' ],
+
 # BuildMultiLine
 	  [ '',
-	    'rm -f temp.out ; echo echo Line 1 "&" sleep 1 > temp1.out ; echo echo Line 2 | cat temp1.out - > tempt.out ; mv -f tempt.out temp1.out ; cat temp1.out',
+	    'rm -f temp.out temp2.out ; echo echo Line 1 "&" sleep 1 > temp1.out ; echo echo Line 2 | cat temp1.out - > tempt.out ; mv -f tempt.out temp1.out ; cat temp1.out',
 	    'echo Line 1 & sleep 1 echo Line 2' ],
 
 	  [ '',
@@ -299,6 +315,11 @@ $rev = 'rev';
 	  [ '',
 	    'echo "ps | grep sleep | grep -v grep | wc -l" | cat temp2.out - > tempt.out ; mv -f tempt.out temp2.out ; cat temp2.out',
 	    'sleep 2 & ps | grep sleep | grep -v grep | wc -l sleep 3 ps | grep sleep | grep -v grep | wc -l' ],
+
+# Memory Leak
+    [ '(Detect Memory Leak)',
+	    'echo ls | valgrind ./cs202sh -p > temp3.out 2> temp.out ; grep "All heap blocks were freed" < temp.out | wc -l',
+	    '1' ],
 
 # Zombie
 # Method 1
@@ -313,7 +334,7 @@ $rev = 'rev';
 
 # CleanupMultiLine
 	  [ '',
-	    'rm -f temp1.out temp2.out ; echo clean',
+	    'rm -f temp.out temp1.out temp2.out temp3.out ; echo clean',
 	    'clean' ],
 	  );
 
