@@ -19,8 +19,8 @@ extern uint8_t _binary_obj_p_allocator4_start[];
 extern uint8_t _binary_obj_p_allocator4_end[];
 extern uint8_t _binary_obj_p_fork_start[];
 extern uint8_t _binary_obj_p_fork_end[];
-extern uint8_t _binary_obj_p_forkexit_start[];
-extern uint8_t _binary_obj_p_forkexit_end[];
+// extern uint8_t _binary_obj_p_forkexit_start[];
+// extern uint8_t _binary_obj_p_forkexit_end[];
 
 struct ramimage {
     void* begin;
@@ -30,8 +30,8 @@ struct ramimage {
     { _binary_obj_p_allocator2_start, _binary_obj_p_allocator2_end },
     { _binary_obj_p_allocator3_start, _binary_obj_p_allocator3_end },
     { _binary_obj_p_allocator4_start, _binary_obj_p_allocator4_end },
-    { _binary_obj_p_fork_start, _binary_obj_p_fork_end },
-    { _binary_obj_p_forkexit_start, _binary_obj_p_forkexit_end }
+    { _binary_obj_p_fork_start, _binary_obj_p_fork_end }
+//    { _binary_obj_p_forkexit_start, _binary_obj_p_forkexit_end }
 };
 
 static int program_load_segment(proc* p, const elf_program* ph,
