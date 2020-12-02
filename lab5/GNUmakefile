@@ -34,7 +34,7 @@ PROCESS_BINARIES = $(OBJDIR)/p-allocator $(OBJDIR)/p-allocator2 \
 	$(OBJDIR)/p-fork # $(OBJDIR)/p-forkexit
 PROCESS_LIB_OBJS = $(OBJDIR)/lib.o $(OBJDIR)/process.o
 ALLOCATOR_OBJS = $(OBJDIR)/p-allocator.o $(PROCESS_LIB_OBJS)
-PROCESS_OBJS = $(OBJDIR)/p-allocator.o $(OBJDIR)/p-fork.o # $(PROCESS_LIB_OBJS)
+PROCESS_OBJS = $(OBJDIR)/p-allocator.o $(OBJDIR)/p-fork.o $(PROCESS_LIB_OBJS)
 # $(OBJDIR)/p-forkexit.o
 PROCESS_LINKER_FILES = link/process.ld link/shared.ld
 
